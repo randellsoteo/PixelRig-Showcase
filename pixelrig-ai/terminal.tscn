@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://hvvkl7lvsd4v"]
+
+[ext_resource type="Script" uid="uid://b1283gcqqfboh" path="res://terminal.gd" id="1_7d6gb"]
+[ext_resource type="Texture2D" uid="uid://6b11mftmk1rm" path="res://download-removebg-preview.png" id="2_b5qft"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0u45f"]
+size = Vector2(138, 142)
+
+[node name="Terminal" type="StaticBody2D"]
+script = ExtResource("1_7d6gb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_b5qft")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_0u45f")

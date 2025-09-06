@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://pysmgpld30kt"]
+
+[ext_resource type="Script" uid="uid://ne81y0wuay6e" path="res://tool.gd" id="1_f6vxs"]
+[ext_resource type="Texture2D" uid="uid://bgj4oalip25rs" path="res://download-removebg-preview (1).png" id="2_3gk12"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3gk12"]
+radius = 21.2132
+height = 183.848
+
+[node name="Tool" type="StaticBody2D"]
+position = Vector2(211, 185)
+script = ExtResource("1_f6vxs")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(241, 251)
+texture = ExtResource("2_3gk12")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(243, 247)
+rotation = 0.785398
+shape = SubResource("CapsuleShape2D_3gk12")

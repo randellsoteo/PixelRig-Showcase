@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://dx5vuu1noee2i"]
+
+[ext_resource type="Script" uid="uid://ds7fdahyjjr6e" path="res://quizmaster.gd" id="1_fxfy0"]
+[ext_resource type="Texture2D" uid="uid://hdy2k00in2tp" path="res://icon.svg" id="2_puwmw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fxfy0"]
+size = Vector2(64, 64)
+
+[node name="Quizmaster" type="StaticBody2D"]
+script = ExtResource("1_fxfy0")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_puwmw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_fxfy0")
