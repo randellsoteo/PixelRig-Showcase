@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://cfyuw72hl38nd"]
+
+[ext_resource type="Script" uid="uid://cwda2ivuwn4b6" path="res://shooter.gd" id="1_q4aig"]
+[ext_resource type="Texture2D" uid="uid://b0renmrhdb7o2" path="res://images-removebg-preview (1).png" id="2_jquju"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jquju"]
+size = Vector2(181, 160)
+
+[node name="Shooter" type="StaticBody2D"]
+script = ExtResource("1_q4aig")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-123, 32)
+texture = ExtResource("2_jquju")
+flip_h = true
+
+[node name="ShootTimer" type="Timer" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-109.5, 30)
+shape = SubResource("RectangleShape2D_jquju")

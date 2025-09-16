@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://cb870han1j5p4"]
+
+[ext_resource type="Script" uid="uid://bnufivgjn1yr8" path="res://checkpoint.gd" id="1_luqgl"]
+[ext_resource type="Texture2D" uid="uid://hk2uilcknbi2" path="res://Martian_Conduit_Plating_(placed).png" id="2_r6hke"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_r6hke"]
+radius = 33.9411
+
+[node name="Checkpoint" type="StaticBody2D"]
+script = ExtResource("1_luqgl")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_r6hke")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_r6hke")

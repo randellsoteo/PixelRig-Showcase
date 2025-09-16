@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b3d5v3f3xxmyr"]
+[gd_scene load_steps=16 format=3 uid="uid://b3d5v3f3xxmyr"]
 
 [ext_resource type="PackedScene" uid="uid://by7yctgrl7bo1" path="res://player.tscn" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://cye0siraoeqot" path="res://world.gd" id="1_fj7yv"]
@@ -8,6 +8,9 @@
 [ext_resource type="Script" uid="uid://bxy6c1qx4dxeq" path="res://quiz_ui.gd" id="6_dwbse"]
 [ext_resource type="PackedScene" uid="uid://dx5vuu1noee2i" path="res://quizmaster.tscn" id="7_pkg7o"]
 [ext_resource type="PackedScene" uid="uid://oc4d7qawurv6" path="res://terminal_ui.tscn" id="8_gbfbk"]
+[ext_resource type="PackedScene" uid="uid://cfyuw72hl38nd" path="res://shooter.tscn" id="9_ioo17"]
+[ext_resource type="PackedScene" uid="uid://blk42hgh3rpoo" path="res://projectile.tscn" id="10_wse8f"]
+[ext_resource type="PackedScene" uid="uid://cb870han1j5p4" path="res://checkpoint.tscn" id="11_ic0uy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fj7yv"]
 size = Vector2(1280, 20)
@@ -29,7 +32,7 @@ position = Vector2(640, 359.5)
 scale = Vector2(6.4, 3.595)
 texture = ExtResource("3_tlwt5")
 
-[node name="Player" parent="." instance=ExtResource("1_f3sb7")]
+[node name="Player" parent="." groups=["player"] instance=ExtResource("1_f3sb7")]
 modulate = Color(0.822726, 0.792002, 0.699268, 1)
 position = Vector2(226, 173)
 
@@ -129,3 +132,15 @@ scale = Vector2(0.3, 0.3)
 position = Vector2(812, 208)
 
 [node name="TerminalUI" parent="." instance=ExtResource("8_gbfbk")]
+
+[node name="Shooter" parent="." instance=ExtResource("9_ioo17")]
+position = Vector2(92, 471)
+scale = Vector2(0.5, 0.5)
+projectile_scene = ExtResource("10_wse8f")
+fire_interval = 1.0
+
+[node name="PlayerStart" type="Marker2D" parent="."]
+position = Vector2(122, 98)
+
+[node name="Checkpoint" parent="." instance=ExtResource("11_ic0uy")]
+position = Vector2(507, 250)

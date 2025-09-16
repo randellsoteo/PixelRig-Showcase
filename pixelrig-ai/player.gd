@@ -4,7 +4,27 @@ extends CharacterBody2D
 @export var interact_distance: float = 50.0
 
 var can_move: bool = true  # blocks movement when true
+var health: int = 3  # starting HP
 
+func take_damage(amount: int) -> void:
+	health -= amount
+	print("Player HP:", health)
+	
+	if health <= 0:
+		die()
+
+func die() -> void:
+	print("💀 Player is dead")
+
+	# Find the world and call respawn
+	var world = get_tree().current_scene
+	if world and world.has_method("respawn_player"):
+		world.respawn_player()
+	
+	# Reset health
+	health = 3
+
+	
 func _physics_process(delta):
 	if not can_move:
 		velocity = Vector2.ZERO
