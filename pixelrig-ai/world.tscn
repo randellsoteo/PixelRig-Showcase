@@ -1,16 +1,19 @@
-[gd_scene load_steps=16 format=3 uid="uid://b3d5v3f3xxmyr"]
+[gd_scene load_steps=19 format=3 uid="uid://b3d5v3f3xxmyr"]
 
 [ext_resource type="PackedScene" uid="uid://by7yctgrl7bo1" path="res://player.tscn" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://cye0siraoeqot" path="res://world.gd" id="1_fj7yv"]
 [ext_resource type="Texture2D" uid="uid://cvnjo146ljtu0" path="res://Solid_white.png" id="3_tlwt5"]
 [ext_resource type="PackedScene" uid="uid://hvvkl7lvsd4v" path="res://terminal.tscn" id="4_aqk2v"]
 [ext_resource type="PackedScene" uid="uid://pysmgpld30kt" path="res://tool.tscn" id="5_036b0"]
+[ext_resource type="Script" uid="uid://ce5030nntfbll" path="res://UIManager.gd" id="6_2o6r5"]
 [ext_resource type="Script" uid="uid://bxy6c1qx4dxeq" path="res://quiz_ui.gd" id="6_dwbse"]
+[ext_resource type="Script" uid="uid://1gpblsr3h3ch" path="res://terminal_text.gd" id="6_k3n1d"]
 [ext_resource type="PackedScene" uid="uid://dx5vuu1noee2i" path="res://quizmaster.tscn" id="7_pkg7o"]
 [ext_resource type="PackedScene" uid="uid://oc4d7qawurv6" path="res://terminal_ui.tscn" id="8_gbfbk"]
 [ext_resource type="PackedScene" uid="uid://cfyuw72hl38nd" path="res://shooter.tscn" id="9_ioo17"]
 [ext_resource type="PackedScene" uid="uid://blk42hgh3rpoo" path="res://projectile.tscn" id="10_wse8f"]
 [ext_resource type="PackedScene" uid="uid://cb870han1j5p4" path="res://checkpoint.tscn" id="11_ic0uy"]
+[ext_resource type="PackedScene" uid="uid://drylj2ljl71ai" path="res://hostile.tscn" id="14_70uel"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fj7yv"]
 size = Vector2(1280, 20)
@@ -113,6 +116,7 @@ position = Vector2(980, 203)
 scale = Vector2(0.3, 0.3)
 
 [node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource("6_2o6r5")
 
 [node name="TerminalText" type="Label" parent="UI"]
 anchors_preset = 2
@@ -123,13 +127,14 @@ offset_right = 222.0
 grow_vertical = 0
 theme_override_colors/font_color = Color(0, 0.501961, 0, 1)
 theme_override_font_sizes/font_size = 30
+script = ExtResource("6_k3n1d")
 
 [node name="Tool" parent="." instance=ExtResource("5_036b0")]
-position = Vector2(736, 34)
+position = Vector2(661, 169)
 scale = Vector2(0.3, 0.3)
 
 [node name="Quizmaster" parent="." instance=ExtResource("7_pkg7o")]
-position = Vector2(812, 208)
+position = Vector2(780, 252)
 
 [node name="TerminalUI" parent="." instance=ExtResource("8_gbfbk")]
 
@@ -144,3 +149,10 @@ position = Vector2(122, 98)
 
 [node name="Checkpoint" parent="." instance=ExtResource("11_ic0uy")]
 position = Vector2(507, 250)
+
+[node name="Checkpoint2" parent="." instance=ExtResource("11_ic0uy")]
+position = Vector2(1083, 335)
+scale = Vector2(1.00289, 0.98433)
+
+[node name="CharacterBody2D" parent="." instance=ExtResource("14_70uel")]
+position = Vector2(755, 422)
