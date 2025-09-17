@@ -18,8 +18,7 @@ func _ready():
 func respawn_player():
 	var player = $Player
 	player.global_position = spawn_point
-	if player.has_variable("health"):
-		player.health = 3  # reset health if player has health var
+	player.health = 3 # Reset health directly
 	print("🔄 Respawned at:", spawn_point)
 
 func set_spawn_point(new_point: Vector2):

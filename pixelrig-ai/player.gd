@@ -16,15 +16,14 @@ func take_damage(amount: int) -> void:
 func die() -> void:
 	print("💀 Player is dead")
 
+	# Reset health
+	health = 3
+
 	# Find the world and call respawn
 	var world = get_tree().current_scene
 	if world and world.has_method("respawn_player"):
 		world.respawn_player()
-	
-	# Reset health
-	health = 3
 
-	
 func _physics_process(delta):
 	if not can_move:
 		velocity = Vector2.ZERO
