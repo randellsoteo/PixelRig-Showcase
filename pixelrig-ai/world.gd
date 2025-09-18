@@ -1,3 +1,4 @@
+# world.gd
 extends Node2D
 
 var spawn_point: Vector2

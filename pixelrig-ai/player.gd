@@ -1,3 +1,4 @@
+# player.gd
 extends CharacterBody2D
 
 @export var speed: float = 400.0
@@ -9,7 +10,10 @@ var health: int = 3
 var stun_timer: Timer
 var knockback_vector: Vector2 = Vector2.ZERO
 var knockback_time: float = 0.0
-var knockback_duration: float = 0.2  # how long knockback lasts
+var knockback_duration: float = 0.2 # how long knockback lasts
+
+# New: Reference to the bullet scene to be instanced
+const BULLET_SCENE = preload("res://Bullet.tscn")
 
 func _ready():
 	stun_timer = Timer.new()
@@ -26,7 +30,6 @@ func take_damage(amount: int) -> void:
 
 func die() -> void:
 	print("💀 Player is dead")
-	health = 3
 	var world = get_tree().current_scene
 	if world and world.has_method("respawn_player"):
 		world.respawn_player()
@@ -62,6 +65,30 @@ func _physics_process(delta):
 
 	if Input.is_action_just_pressed("Interact"):
 		_interact()
+	
+	# New: Check for the "Attack" input
+	if Input.is_action_just_pressed("Attack"):
+		_shoot()
+
+# New: Function to handle the player shooting a bullet
+func _shoot():
+	var bullet = BULLET_SCENE.instantiate()
+	get_tree().current_scene.add_child(bullet)
+
+	var dir = Vector2.ZERO
+	if velocity.length() > 0:
+		dir = velocity.normalized()
+	else:
+		var last_input = Input.get_vector("Left","Right","Up","Down")
+		if last_input.length() > 0:
+			dir = last_input.normalized()
+		else:
+			dir = Vector2.RIGHT
+
+	bullet.rotation = dir.angle()
+	bullet.global_position = global_position + dir * 24  # spawn a bit forward
+	bullet.shooter = self
+
 
 func _interact():
 	var space_state = get_world_2d().direct_space_state
