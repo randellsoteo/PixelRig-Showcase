@@ -1,29 +1,69 @@
-extends CharacterBody2D
+extends CharacterBody2D 
 
-@export var speed: float = 450.0   # slightly faster than player (400)
-@export var detection_radius: float = 200.0
+@export var speed: float = 380.0
+@export var detection_radius: float = 600.0
+@export var knockback_force: float = 400.0
+@export var attack_cooldown: float = 1.0  # seconds between attacks
 
 @onready var detection_area: Area2D = $DetectionArea
+@onready var detection_shape: CollisionShape2D = $DetectionArea/CollisionShape2D
+
 var target: Node = null
+var can_attack: bool = true
+var cooldown_timer: Timer
 
 func _ready():
-	# Make sure detection radius matches exported variable
+	# Detection shape
 	var shape = CircleShape2D.new()
 	shape.radius = detection_radius
-	$DetectionArea/CollisionShape2D.shape = shape
+	detection_shape.shape = shape
 
 	# Connect signals
 	detection_area.body_entered.connect(_on_body_entered)
 	detection_area.body_exited.connect(_on_body_exited)
 
+	# Setup cooldown timer
+	cooldown_timer = Timer.new()
+	cooldown_timer.one_shot = true
+	add_child(cooldown_timer)
+	cooldown_timer.timeout.connect(_on_attack_ready)
+
 func _physics_process(delta: float) -> void:
-	if target:
+	if target and can_attack:
+		var dist = global_position.distance_to(target.global_position)
+		var factor = clamp(1.0 - (dist / detection_radius), 0.3, 1.0)
 		var direction = (target.global_position - global_position).normalized()
-		velocity = direction * speed
-		move_and_slide()
+		velocity = direction * speed * factor
+
+		# Detect collision with move_and_collide
+		var collision = move_and_collide(velocity * delta)
+		if collision:
+			if collision.get_collider().name == "Player":
+				_attack(collision.get_collider())
 	else:
 		velocity = Vector2.ZERO
 		move_and_slide()
+
+func _attack(player: Node) -> void:
+	if not can_attack:
+		return
+	can_attack = false  # stop further attacks until cooldown
+	velocity = Vector2.ZERO
+
+	# Apply damage
+	if player.has_method("take_damage"):
+		player.take_damage(1)
+
+	# Knockback
+	if player.has_method("apply_knockback"):
+		var dir = (player.global_position - global_position).normalized()
+		player.apply_knockback(dir, knockback_force)
+
+	# Start cooldown
+	cooldown_timer.start(attack_cooldown)
+
+func _on_attack_ready():
+	can_attack = true
 
 func _on_body_entered(body: Node) -> void:
 	if body.name == "Player":
@@ -32,8 +72,3 @@ func _on_body_entered(body: Node) -> void:
 func _on_body_exited(body: Node) -> void:
 	if body == target:
 		target = null
-
-func _on_Hostile_body_entered(body: Node) -> void:
-	# Collision with Player (not just detection)
-	if body.name == "Player" and body.has_method("take_damage"):
-		body.take_damage(1)

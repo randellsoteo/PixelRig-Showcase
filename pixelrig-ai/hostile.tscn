@@ -1,10 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://drylj2ljl71ai"]
+[gd_scene load_steps=6 format=3 uid="uid://drylj2ljl71ai"]
 
 [ext_resource type="Texture2D" uid="uid://hdy2k00in2tp" path="res://icon.svg" id="1_iy37f"]
 [ext_resource type="Script" uid="uid://blme3mphwsc6y" path="res://hostile.gd" id="1_xyycg"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xyycg"]
+size = Vector2(128, 128)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_t8igv"]
-radius = 72.4431
+radius = 682.047
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xyycg"]
+radius = 92.0
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 scale = Vector2(0.5, 0.5)
@@ -14,7 +20,16 @@ script = ExtResource("1_xyycg")
 modulate = Color(1, 0.215686, 0.117647, 1)
 texture = ExtResource("1_iy37f")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_xyycg")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+modulate = Color(0, 1, 1, 1)
 shape = SubResource("CircleShape2D_t8igv")
 
-[node name="Area2D" type="Area2D" parent="Sprite2D/CollisionShape2D"]
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CircleShape2D_xyycg")
