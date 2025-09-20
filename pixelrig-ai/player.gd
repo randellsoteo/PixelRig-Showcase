@@ -1,8 +1,8 @@
-# player.gd
 extends CharacterBody2D
 
 @export var speed: float = 400.0
 @export var interact_distance: float = 50.0
+@onready var sprite: AnimatedSprite2D = $Sprite
 
 var can_move: bool = true
 var health: int = 3
@@ -35,6 +35,8 @@ func die() -> void:
 		world.respawn_player()
 
 func apply_knockback(direction: Vector2, force: float) -> void:
+	# This is the simplified line. It will apply the same force
+	# regardless of the direction of the knockback.
 	knockback_vector = direction.normalized() * force
 	knockback_time = knockback_duration
 
@@ -55,23 +57,37 @@ func _physics_process(delta):
 
 	# 🔹 If stunned, don't process input
 	if not can_move:
+		velocity = Vector2.ZERO
 		move_and_slide()
+		sprite.play("idle")
 		return
+
+	# 🔹 Handle attack animation and shooting first
+	if Input.is_action_just_pressed("Attack"):
+		_shoot()
+		return # Stop processing input to prevent movement animation from overriding
 
 	# 🔹 Normal movement
 	var input_vector = Input.get_vector("Left", "Right", "Up", "Down")
 	velocity = input_vector * speed
 	move_and_slide()
-
+	
+	if input_vector == Vector2.ZERO:
+		sprite.play("idle")
+	elif input_vector.x < 0:
+		sprite.flip_h = true
+		sprite.play("run")
+	elif input_vector.x > 0:
+		sprite.flip_h = false
+		sprite.play("run")
+		
 	if Input.is_action_just_pressed("Interact"):
 		_interact()
-	
-	# New: Check for the "Attack" input
-	if Input.is_action_just_pressed("Attack"):
-		_shoot()
 
-# New: Function to handle the player shooting a bullet
 func _shoot():
+	sprite.play("shoot") # Play the animation before instancing the bullet
+	velocity = Vector2.ZERO # Stop the player
+	
 	var bullet = BULLET_SCENE.instantiate()
 	get_tree().current_scene.add_child(bullet)
 
@@ -86,7 +102,7 @@ func _shoot():
 			dir = Vector2.RIGHT
 
 	bullet.rotation = dir.angle()
-	bullet.global_position = global_position + dir * 24  # spawn a bit forward
+	bullet.global_position = global_position + dir * 24 # spawn a bit forward
 	bullet.shooter = self
 
 
