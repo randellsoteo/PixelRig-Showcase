@@ -15,6 +15,13 @@ radius = 92.0
 [node name="CharacterBody2D" type="CharacterBody2D"]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_xyycg")
+speed = null
+detection_radius = null
+knockback_force = null
+attack_cooldown = null
+health = null
+knockback_duration = null
+separation_time = null
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(1, 0.215686, 0.117647, 1)
