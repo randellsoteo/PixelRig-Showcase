@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://c23usrwuof0ju"]
+
+[ext_resource type="Texture2D" uid="uid://c7r66g81wxs8k" path="res://assets/HUD/pixel_heart.png" id="1_37p78"]
+[ext_resource type="Script" uid="uid://d4fji511ods41" path="res://hud.gd" id="1_64ctp"]
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_64ctp")
+
+[node name="Heart1" type="TextureRect" parent="."]
+offset_left = 17.0
+offset_top = 7.0
+offset_right = 57.0
+offset_bottom = 47.0
+texture = ExtResource("1_37p78")
+expand_mode = 1
+
+[node name="Heart2" type="TextureRect" parent="."]
+offset_left = 55.0
+offset_top = 8.0
+offset_right = 95.0
+offset_bottom = 48.0
+texture = ExtResource("1_37p78")
+expand_mode = 1
+
+[node name="Heart3" type="TextureRect" parent="."]
+offset_left = 93.0
+offset_top = 8.0
+offset_right = 133.0
+offset_bottom = 48.0
+texture = ExtResource("1_37p78")
+expand_mode = 1

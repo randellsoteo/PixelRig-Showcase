@@ -3,9 +3,15 @@ extends Node2D
 
 var spawn_point: Vector2
 
+@onready var player = $Player
+@onready var hud = $CanvasLayer/HUD
+
 func _ready():
-	var player = $Player
-	
+	# Connect Player → HUD
+	player.health_changed.connect(hud.update_health)
+	# Initialize HUD when game starts
+	hud.update_health(player.health)
+
 	# Try to find PlayerStart marker
 	if has_node("PlayerStart"):
 		var player_start = $PlayerStart
@@ -20,27 +26,29 @@ func _ready():
 func respawn_player():
 	var player = $Player
 	
-	# 🔹 NEW: Reset all hostiles FIRST (before moving player)
+	# 🔹 Reset all hostiles first
 	reset_all_hostiles()
 	
-	# Then respawn the player
+	# Respawn player
 	player.global_position = spawn_point
-	player.health = 3  # Reset health directly
-	player.velocity = Vector2.ZERO  # Clear any remaining velocity
+	player.health = player.max_health  # Reset health
+	player.velocity = Vector2.ZERO     # Clear velocity
 	
-	# 🔹 NEW: Clear any ongoing player states
+	# Clear knockback state
 	if player.has_method("clear_knockback"):
 		player.clear_knockback()
 	
+	# 🔹 NEW: Update HUD to show full hearts again
+	hud.update_health(player.health)
+	
 	print("🔄 Respawned at:", spawn_point)
 
-# 🔹 NEW: Reset all hostiles to their spawn positions
 func reset_all_hostiles():
 	var hostiles = get_tree().get_nodes_in_group("Hostile")
 	for hostile in hostiles:
 		if hostile and hostile.has_method("reset_state"):
 			hostile.reset_state()
-	print("🔄 Reset", " ", hostiles.size()," ", "hostiles")
+	print("🔄 Reset", hostiles.size(), "hostiles")
 
 func set_spawn_point(new_point: Vector2):
 	spawn_point = new_point

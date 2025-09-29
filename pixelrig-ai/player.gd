@@ -7,8 +7,11 @@ extends CharacterBody2D
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 
+signal health_changed(new_health)
+
 var can_move: bool = true
-var health: int = 3
+var max_health: int = 3
+var health: int = max_health
 var stun_timer: Timer
 var knockback_vector: Vector2 = Vector2.ZERO
 var knockback_time: float = 0.0
@@ -24,10 +27,15 @@ func _ready():
 
 func take_damage(amount: int) -> void:
 	health -= amount
+	health = clamp(health, 0, max_health)
 	print("Player HP:", health)
-	
+
+	emit_signal("health_changed", health)
+
 	if health <= 0:
 		die()
+
+
 
 func die() -> void:
 	print("💀 Player is dead")
