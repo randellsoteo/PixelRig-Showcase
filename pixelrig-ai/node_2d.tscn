@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cr03q28kyu1vr"]
+
+[ext_resource type="Texture2D" uid="uid://cvnjo146ljtu0" path="res://Solid_white.png" id="1_wtcfe"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="SolidWhite" type="Sprite2D" parent="."]
+position = Vector2(630, 334)
+scale = Vector2(30.355, 22.94)
+texture = ExtResource("1_wtcfe")
