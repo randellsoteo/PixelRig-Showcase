@@ -2,7 +2,7 @@
 extends CharacterBody2D
 
 # --- Exported Properties ---
-@export var speed: float = 400.0 # Player's movement speed.
+@export var speed: float = 250.0 # Player's movement speed.
 @export var interact_distance: float = 50.0 # Range for triggering interactions.
 @export var attack_range: float = 400.0 # Range for targeting enemies.
 

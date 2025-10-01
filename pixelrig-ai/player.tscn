@@ -93,23 +93,23 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_onrkg"]
-size = Vector2(40, 56)
+size = Vector2(34.2857, 48)
 
 [node name="Player" type="CharacterBody2D"]
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.25, 0.25)
 script = ExtResource("1_4flbx")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
-position = Vector2(-2, 0)
-scale = Vector2(0.5, 0.5)
+scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_hqtel")
 animation = &"idle"
 frame_progress = 0.888274
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-4, 0)
+scale = Vector2(3.5, 3.5)
 shape = SubResource("RectangleShape2D_onrkg")
 
 [node name="PlayerCamera" type="Camera2D" parent="."]
+zoom = Vector2(1.5, 1.5)
 position_smoothing_enabled = true

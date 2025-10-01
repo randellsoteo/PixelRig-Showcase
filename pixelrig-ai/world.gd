@@ -106,6 +106,7 @@ func start_intro_cutscene():
 	
 	# Disable player control during cutscene
 	player.set_physics_process(false)
+	freeze_all_hostiles()
 	
 	# Define your intro dialogue with camera pans
 	var intro_dialogue = [
@@ -137,6 +138,20 @@ func start_intro_cutscene():
 	dialogue_system.start_dialogue(intro_dialogue)
 
 func _on_intro_dialogue_finished():
-	# Re-enable player control after cutscene
 	player.set_physics_process(true)
+	unfreeze_all_hostiles()
 	print("✅ Intro cutscene finished - Game started!")
+	
+func freeze_all_hostiles():
+	var hostiles = get_tree().get_nodes_in_group("Hostile")
+	for hostile in hostiles:
+		if hostile:
+			hostile.set_physics_process(false)
+			if hostile.has_node("AnimatedSprite2D"):
+				hostile.get_node("AnimatedSprite2D").stop()
+
+func unfreeze_all_hostiles():
+	var hostiles = get_tree().get_nodes_in_group("Hostile")
+	for hostile in hostiles:
+		if hostile:
+			hostile.set_physics_process(true)
