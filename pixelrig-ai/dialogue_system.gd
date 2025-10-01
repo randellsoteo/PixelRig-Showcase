@@ -1,59 +1,88 @@
 # DialogueSystem.gd
-extends CanvasLayer # Inherits from CanvasLayer, meaning it's a UI element that draws above the 2D world.
+extends CanvasLayer
 
-signal dialogue_finished # Define a custom signal that will be emitted when the entire dialogue sequence is done.
+signal dialogue_finished
 
-# Get references to the nodes in the scene tree when the script starts (pag start, naga run dayon - this note confirms your understanding of @onready)
+# Get references to the nodes in the scene tree
 @onready var dialogue_box = $DialogueBox 
 @onready var name_label = $DialogueBox/NameLabel 
 @onready var text_label = $DialogueBox/TextLabel
-@onready var continue_indicator = $DialogueBox/ContinueIndicator # An element (like an arrow or icon) that indicates the player can continue.
+@onready var continue_indicator = $DialogueBox/ContinueIndicator 
+@onready var typewriter_timer = $TypewriterTimer # YOU MUST ADD A TIMER NODE NAMED 'TypewriterTimer'
 
 # Variables to manage the state of the dialogue
-var dialogue_data: Array = [] # Array to hold all the dialogue lines/blocks (e.g., speaker, text, actions).
-var current_index: int = 0 # Index of the current dialogue line being displayed.
-var is_active: bool = false # Flag to check if a dialogue sequence is currently running.
+var dialogue_data: Array = []
+var current_index: int = 0
+var is_active: bool = false
+
+# --- NEW STATE VARIABLES FOR TYPEWRITER EFFECT ---
+var full_text: String = "" # Holds the entire text for the current line
+var char_index: int = 0 # Tracks how many characters have been displayed
+var is_typing: bool = false # Flag to indicate if the typewriter effect is running
+const TYPING_SPEED: float = 0.05 # Delay in seconds between characters
 
 func _ready():
 	# Called when the node enters the scene tree for the first time.
 	hide_dialogue() # Start the game with the dialogue box hidden.
+	# --- NEW: Connect the Timer's timeout signal ---
+	typewriter_timer.timeout.connect(_on_typewriter_timer_timeout)
 
 func start_dialogue(dialogue_array: Array):
 	# Public function to begin a new dialogue sequence.
-	dialogue_data = dialogue_array # Store the array of dialogue data passed to the function.
-	current_index = 0 # Start from the first line.
-	is_active = true # Set the active flag to true.
-	show_current_dialogue() # Display the first line of dialogue.
+	dialogue_data = dialogue_array
+	current_index = 0
+	is_active = true
+	show_current_dialogue()
 
 func show_current_dialogue():
 	# Internal function to display the dialogue line at current_index.
 	
 	if current_index >= dialogue_data.size():
-		# Check if we've gone past the last element in the array.
-		end_dialogue() # If so, finish the entire dialogue sequence.
+		end_dialogue()
 		return
 	
-	var current = dialogue_data[current_index] # Get the data object (dictionary) for the current line.
-	dialogue_box.show() # Make the main dialogue box visible.
+	var current = dialogue_data[current_index]
+	dialogue_box.show()
 	
 	# Set speaker name (optional)
 	if current.has("speaker"):
-		# Check if the current line has a "speaker" key.
-		name_label.text = current.speaker # Set the speaker name label.
-		name_label.show() # Make the name label visible.
+		name_label.text = current.speaker
+		name_label.show()
 	else:
-		name_label.hide() # Hide the name label if no speaker is specified.
+		name_label.hide()
 	
-	# Set dialogue text
-	text_label.text = current.text # Set the main dialogue text.
+	# --- TYPEWRITER SETUP ---
+	full_text = current.text # Store the full text
+	char_index = 0 # Reset character counter
+	text_label.text = "" # Clear the text label before typing
+	continue_indicator.hide() # Hide indicator while typing
+	is_typing = true # Set the flag
+	typewriter_timer.wait_time = TYPING_SPEED
+	typewriter_timer.start() # Start the typing effect
 	
 	# Handle camera pan if specified
 	if current.has("camera_target"):
-		# Check if the dialogue line specifies a camera movement.
-		# pan_duration defaults to 1.0 if not specified in the dialogue data.
+		# pan_duration defaults to 1.0 if not specified
 		pan_camera_to(current.camera_target, current.get("pan_duration", 1.0))
-	
-	continue_indicator.show() # Show the indicator that prompts the player to continue.
+
+# --- NEW FUNCTION: Timer Callback ---
+func _on_typewriter_timer_timeout():
+	if char_index < full_text.length():
+		# Append the next character to the text_label
+		text_label.text += full_text[char_index]
+		char_index += 1
+	else:
+		# Typing is finished
+		typewriter_timer.stop()
+		is_typing = false
+		continue_indicator.show() # Show indicator, ready for player to advance
+
+# --- NEW FUNCTION: Skip Typing ---
+func skip_typewriter():
+	typewriter_timer.stop() # Stop the timer
+	text_label.text = full_text # Instantly show the entire text
+	is_typing = false # Reset the flag
+	continue_indicator.show() # Show indicator
 
 func hide_dialogue():
 	# Hides all parts of the dialogue interface.
@@ -81,9 +110,3 @@ func pan_camera_to(target_position: Vector2, duration: float):
 		var tween = create_tween() # Create a Tween object for smooth animation.
 		# Animate the camera's global_position from its current spot to the target_position over the specified duration.
 		tween.tween_property(camera, "global_position", target_position, duration)
-
-func _input(event):
-	# Built-in Godot function to handle user input events.
-	# Check if the dialogue is active AND the "ui_accept" action (usually mapped to Enter/Space/A button) was pressed.
-	if is_active and event.is_action_pressed("ui_accept"):
-		next_dialogue() # Advance to the next line of dialogue.

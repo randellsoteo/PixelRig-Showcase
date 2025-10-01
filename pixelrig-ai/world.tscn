@@ -15,9 +15,9 @@
 [ext_resource type="PackedScene" uid="uid://cb870han1j5p4" path="res://checkpoint.tscn" id="11_ic0uy"]
 [ext_resource type="PackedScene" uid="uid://drylj2ljl71ai" path="res://hostile.tscn" id="14_70uel"]
 [ext_resource type="PackedScene" uid="uid://c23usrwuof0ju" path="res://hud.tscn" id="15_hiqwa"]
-[ext_resource type="PackedScene" uid="uid://b2i7uqwr0bvu7" path="res://death_popup.tscn" id="16_2u3nc"]
-[ext_resource type="PackedScene" uid="uid://30c0ap0h4uqm" path="res://dialogue_system.tscn" id="17_udxuc"]
-[ext_resource type="PackedScene" uid="uid://degorid6wi1xg" path="res://level1.tscn" id="19_cbp6q"]
+[ext_resource type="PackedScene" path="res://death_popup.tscn" id="16_2u3nc"]
+[ext_resource type="PackedScene" uid="uid://djitq0uk1qq1g" path="res://dialogue_system.tscn" id="17_udxuc"]
+[ext_resource type="PackedScene" uid="uid://btwlgc8kffhjh" path="res://level1.tscn" id="19_cbp6q"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fj7yv"]
 size = Vector2(1280, 20)
@@ -142,22 +142,24 @@ theme_override_font_sizes/font_size = 30
 script = ExtResource("6_k3n1d")
 
 [node name="Tool" parent="." instance=ExtResource("5_036b0")]
-position = Vector2(661, 169)
+z_index = 1
+position = Vector2(2085, 823)
 scale = Vector2(0.3, 0.3)
 
 [node name="Quizmaster" parent="." instance=ExtResource("7_pkg7o")]
-position = Vector2(780, 252)
+z_index = 1
+position = Vector2(2747, -482)
 
 [node name="TerminalUI" parent="." instance=ExtResource("8_gbfbk")]
 
 [node name="Shooter" parent="." instance=ExtResource("9_ioo17")]
-position = Vector2(92, -484)
+position = Vector2(745, -774)
 scale = Vector2(0.5, 0.5)
 projectile_scene = ExtResource("10_wse8f")
 fire_interval = 1.0
 
 [node name="PlayerStart" type="Marker2D" parent="."]
-position = Vector2(1831, -493)
+position = Vector2(2203, -485)
 
 [node name="Checkpoint" parent="." instance=ExtResource("11_ic0uy")]
 position = Vector2(507, 250)
@@ -168,12 +170,30 @@ scale = Vector2(1.00289, 0.98433)
 
 [node name="hostile" parent="." instance=ExtResource("14_70uel")]
 z_index = 1
-position = Vector2(741, -863)
+position = Vector2(2751, 213)
 scale = Vector2(3, 3)
 spawn_marker_path = NodePath("../Hostile1Spawn")
 
 [node name="Hostile1Spawn" type="Marker2D" parent="."]
-position = Vector2(741, -863)
+position = Vector2(2751, 213)
+
+[node name="hostile3" parent="." instance=ExtResource("14_70uel")]
+z_index = 1
+position = Vector2(2668, 113)
+scale = Vector2(3, 3)
+spawn_marker_path = NodePath("../Hostile1Spawn3")
+
+[node name="Hostile1Spawn3" type="Marker2D" parent="."]
+position = Vector2(2668, 113)
+
+[node name="hostile4" parent="." instance=ExtResource("14_70uel")]
+z_index = 1
+position = Vector2(2810, 99)
+scale = Vector2(3, 3)
+spawn_marker_path = NodePath("../Hostile1Spawn4")
+
+[node name="Hostile1Spawn4" type="Marker2D" parent="."]
+position = Vector2(2810, 99)
 
 [node name="hostile2" parent="." instance=ExtResource("14_70uel")]
 position = Vector2(435, 774)
@@ -192,3 +212,4 @@ visible = false
 [node name="DialogueSystem" parent="." instance=ExtResource("17_udxuc")]
 
 [node name="DemoLevel2" parent="." instance=ExtResource("19_cbp6q")]
+position = Vector2(338, 17)

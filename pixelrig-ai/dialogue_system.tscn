@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://30c0ap0h4uqm"]
+[gd_scene load_steps=4 format=3 uid="uid://djitq0uk1qq1g"]
 
 [ext_resource type="Script" uid="uid://to27uwj3svp" path="res://dialogue_system.gd" id="1_r12a2"]
+[ext_resource type="Script" uid="uid://bqccnpp158qg1" path="res://scripts/instruction_pop_up.gd" id="2_7d2kg"]
+[ext_resource type="Texture2D" uid="uid://hdy2k00in2tp" path="res://icon.svg" id="3_qmr60"]
 
 [node name="DialogueSystem" type="CanvasLayer"]
 script = ExtResource("1_r12a2")
@@ -53,3 +55,67 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 12
 text = "▼ Press Enter"
 autowrap_mode = 2
+
+[node name="TypewriterTimer" type="Timer" parent="."]
+
+[node name="InstructionPopup" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_7d2kg")
+
+[node name="Panel" type="Panel" parent="InstructionPopup"]
+layout_mode = 0
+offset_left = -245.0
+offset_top = -160.0
+offset_right = 299.0
+offset_bottom = 110.0
+
+[node name="Label" type="Label" parent="InstructionPopup/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -196.0
+offset_top = -65.0
+offset_right = 197.0
+offset_bottom = -37.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Use WASD to move and Space to attack. Good luck!"
+
+[node name="TextureRect" type="TextureRect" parent="InstructionPopup/Panel"]
+layout_mode = 0
+offset_left = 82.0
+offset_top = 118.0
+offset_right = 176.0
+offset_bottom = 212.0
+texture = ExtResource("3_qmr60")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="InstructionPopup/Panel"]
+offset_left = 384.0
+offset_top = 140.0
+offset_right = 478.0
+offset_bottom = 190.0
+texture = ExtResource("3_qmr60")
+expand_mode = 1
+
+[node name="TextureRect3" type="TextureRect" parent="InstructionPopup/Panel"]
+offset_left = 249.0
+offset_top = 140.0
+offset_right = 301.0
+offset_bottom = 192.0
+texture = ExtResource("3_qmr60")
+expand_mode = 1

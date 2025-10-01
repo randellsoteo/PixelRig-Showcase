@@ -20,6 +20,7 @@ var stun_timer: Timer # Timer used to track the duration of a stun effect.
 var knockback_vector: Vector2 = Vector2.ZERO # The current velocity vector for knockback.
 var knockback_time: float = 0.0 # Time remaining for the knockback effect.
 var knockback_duration: float = 0.3 # Duration of the knockback effect.
+var last_direction := Vector2.DOWN # Initialize it to a default facing direction (e.g., front)
 
 # --- Constants ---
 const BULLET_SCENE = preload("res://Bullet.tscn") # Preload the bullet scene for fast instantiation.
@@ -36,46 +37,82 @@ func _ready():
 func _physics_process(delta):
 	# --- 1. Handle Knockback ---
 	if knockback_time > 0:
-		velocity = knockback_vector # Move the player using the knockback vector.
-		knockback_time -= delta # Decrease remaining knockback time.
+		velocity = knockback_vector
+		knockback_time -= delta
 		move_and_slide()
-		return # Skip all other movement/input logic while knocked back.
+		return
 	
 	# --- 2. Handle Stun ---
 	if not can_move:
-		velocity = Vector2.ZERO # Stop movement if stunned.
+		velocity = Vector2.ZERO
 		move_and_slide()
-		sprite.play("idle") # Play idle animation while stunned.
-		return # Skip all other input logic while stunned.
+		sprite.play("idle-front") # Default to front idle when stunned
+		return
 	
 	# --- 3. Handle Attack Input ---
 	if Input.is_action_just_pressed("Attack"):
-		var target = _get_nearest_hostile_in_range() # Find the closest enemy within attack range.
+		var target = _get_nearest_hostile_in_range()
 		if target:
-			_shoot(target) # Execute the shooting action.
+			_shoot(target)
 		else:
 			print("❌ No hostile in range — shooting disabled")
-		return # Stop movement/animation processing to prioritize the attack.
+		return
 	
 	# --- 4. Normal Movement Input ---
-	var input_vector = Input.get_vector("Left", "Right", "Up", "Down") # Get directional input.
-	velocity = input_vector * speed # Apply movement speed.
-	move_and_slide() # Move the character using its velocity.
+	var input_vector = Input.get_vector("Left", "Right", "Up", "Down")
 	
-	# --- 5. Animation Logic ---
-	if input_vector == Vector2.ZERO:
-		sprite.play("idle")
-	elif input_vector.x < 0:
-		sprite.flip_h = true # Flip sprite left.
-		sprite.play("run")
-	elif input_vector.x > 0:
-		sprite.flip_h = false # Face sprite right.
-		sprite.play("run")
-	# (Vertical movement uses horizontal animations by default)
+	# --- IMPORTANT: Update last_direction ONLY if there is current input ---
+	if input_vector != Vector2.ZERO:
+		last_direction = input_vector.normalized() # Store the direction
 		
-	# --- 6. Interaction Input ---
-	if Input.is_action_just_pressed("Interact"):
-		_interact() # Check and perform interaction with objects.
+	velocity = input_vector * speed
+	move_and_slide()
+	
+	# --- 5. Animation Logic (Now using 'last_direction' for Idle) ---
+	
+	var is_moving = input_vector != Vector2.ZERO
+	var animation_to_play = ""
+	
+	if is_moving:
+		# --- Running Animations (Same as before) ---
+		if abs(input_vector.x) > abs(input_vector.y): # Prioritize horizontal movement
+			if input_vector.x < 0:
+				sprite.flip_h = true 
+				animation_to_play = "run-right"
+			elif input_vector.x > 0:
+				sprite.flip_h = false
+				animation_to_play = "run-right"
+		else: # Prioritize vertical movement or tie
+			if input_vector.y < 0:
+				sprite.flip_h = false
+				animation_to_play = "back-run"
+			elif input_vector.y > 0:
+				sprite.flip_h = false
+				animation_to_play = "front-run"
+	else:
+		# --- Idle Animations (NEW LOGIC) ---
+		
+		# Prioritize the direction with the largest magnitude from the stored last_direction
+		if abs(last_direction.x) > abs(last_direction.y):
+			# Horizontal Idle
+			if last_direction.x < 0:
+				sprite.flip_h = true # Flip for left
+				animation_to_play = "idle-right"
+			else: # last_direction.x > 0
+				sprite.flip_h = false # No flip for right
+				animation_to_play = "idle-right"
+		else:
+			# Vertical Idle
+			if last_direction.y < 0:
+				sprite.flip_h = false # Reset flip
+				animation_to_play = "idle-back"
+			else: # last_direction.y > 0
+				sprite.flip_h = false # Reset flip
+				animation_to_play = "idle-front"
+
+	# Play the determined animation
+	if animation_to_play != "":
+		sprite.play(animation_to_play)
 
 # --- Health & Damage Functions ---
 
