@@ -244,7 +244,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_onrkg"]
-size = Vector2(34.2857, 48)
+size = Vector2(38.8571, 52.5714)
 
 [node name="Player" type="CharacterBody2D"]
 scale = Vector2(0.25, 0.25)
@@ -258,6 +258,7 @@ animation = &"run-right"
 frame_progress = 0.435151
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8)
 scale = Vector2(3.5, 3.5)
 shape = SubResource("RectangleShape2D_onrkg")
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://b3d5v3f3xxmyr"]
+[gd_scene load_steps=25 format=3 uid="uid://b3d5v3f3xxmyr"]
 
 [ext_resource type="PackedScene" uid="uid://by7yctgrl7bo1" path="res://player.tscn" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://cye0siraoeqot" path="res://world.gd" id="1_fj7yv"]
@@ -15,8 +15,10 @@
 [ext_resource type="PackedScene" uid="uid://cb870han1j5p4" path="res://checkpoint.tscn" id="11_ic0uy"]
 [ext_resource type="PackedScene" uid="uid://drylj2ljl71ai" path="res://hostile.tscn" id="14_70uel"]
 [ext_resource type="PackedScene" uid="uid://c23usrwuof0ju" path="res://hud.tscn" id="15_hiqwa"]
-[ext_resource type="PackedScene" path="res://death_popup.tscn" id="16_2u3nc"]
+[ext_resource type="PackedScene" uid="uid://b2i7uqwr0bvu7" path="res://death_popup.tscn" id="16_2u3nc"]
+[ext_resource type="PackedScene" uid="uid://cw1d7jjf6gjfu" path="res://tutorial_popup.tscn" id="17_cbp6q"]
 [ext_resource type="PackedScene" uid="uid://djitq0uk1qq1g" path="res://dialogue_system.tscn" id="17_udxuc"]
+[ext_resource type="PackedScene" uid="uid://icgnrds7ntj4" path="res://level_complete_popup.tscn" id="18_26xuy"]
 [ext_resource type="PackedScene" uid="uid://btwlgc8kffhjh" path="res://level1.tscn" id="19_cbp6q"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fj7yv"]
@@ -159,7 +161,7 @@ projectile_scene = ExtResource("10_wse8f")
 fire_interval = 1.0
 
 [node name="PlayerStart" type="Marker2D" parent="."]
-position = Vector2(2203, -485)
+position = Vector2(2214, -473)
 
 [node name="Checkpoint" parent="." instance=ExtResource("11_ic0uy")]
 position = Vector2(507, 250)
@@ -208,6 +210,10 @@ position = Vector2(435, 774)
 
 [node name="DeathPopup" parent="CanvasLayer" instance=ExtResource("16_2u3nc")]
 visible = false
+
+[node name="TutorialPopup" parent="CanvasLayer" instance=ExtResource("17_cbp6q")]
+
+[node name="LevelCompletePopup" parent="CanvasLayer" instance=ExtResource("18_26xuy")]
 
 [node name="DialogueSystem" parent="." instance=ExtResource("17_udxuc")]
 

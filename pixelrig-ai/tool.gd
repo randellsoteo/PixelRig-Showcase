@@ -1,4 +1,4 @@
-extends StaticBody2D
+extends Area2D
 
 @export var tool_name = "Demo Tool"
 var indicator: Node = null

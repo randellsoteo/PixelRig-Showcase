@@ -58,6 +58,9 @@ func _physics_process(delta):
 			print("❌ No hostile in range — shooting disabled")
 		return
 	
+	if Input.is_action_just_pressed("Interact"):
+		_interact()
+	
 	# --- 4. Normal Movement Input ---
 	var input_vector = Input.get_vector("Left", "Right", "Up", "Down")
 	
@@ -233,29 +236,39 @@ func _get_nearest_hostile_in_range() -> Node2D:
 # --- Interaction Function ---
 
 func _interact():
-	# Performs a circle cast to find interactable objects.
+	print("Interact key pressed!")
+	
+	# Method 1: Shape query (for physics bodies)
 	var space_state = get_world_2d().direct_space_state
 	var circle = CircleShape2D.new()
 	circle.radius = interact_distance
 	
 	var query = PhysicsShapeQueryParameters2D.new()
 	query.shape = circle
-	query.transform = global_transform # Query at the player's position.
-	query.collision_mask = 0xFFFFFFFF # Check all layers.
+	query.transform = global_transform
+	query.collision_mask = 0xFFFFFFFF
+	query.collide_with_areas = true  # ADD THIS LINE - important for Area2D!
+	query.collide_with_bodies = true
 	var results = space_state.intersect_shape(query)
+	
+	print("Found ", results.size(), " objects nearby")
 	
 	var closest_body: Node = null
 	var closest_distance = INF
 	
 	for result in results:
 		var body = result.collider
+		print("  - Found:", body.name, " | Has interact:", body.has_method("interact"))
 		if body == self:
-			continue # Ignore self.
-		if body.has_method("interact"): # Check if the object is interactable.
+			continue
+		if body.has_method("interact"):
 			var distance = global_position.distance_to(body.global_position)
 			if distance < closest_distance:
 				closest_distance = distance
 				closest_body = body
 	
 	if closest_body:
-		closest_body.interact() # Call the interact method on the closest interactable object.
+		print("Interacting with:", closest_body.name)
+		closest_body.interact()
+	else:
+		print("No interactable objects found")

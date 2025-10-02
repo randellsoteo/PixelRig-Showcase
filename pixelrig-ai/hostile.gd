@@ -155,9 +155,11 @@ func _physics_process(delta: float) -> void:
 			var collision = get_slide_collision(i)
 			var collider = collision.get_collider()
 			
-			if collider.has_method("take_damage") and can_attack:
+			# Only attack if it's the player, not other hostiles
+			if collider.name == "Player" and collider.has_method("take_damage") and can_attack:
 				_attack(collider)
 				break
+		
 	else:
 		velocity = Vector2.ZERO
 		move_and_slide()
